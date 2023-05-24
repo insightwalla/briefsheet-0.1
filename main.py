@@ -57,7 +57,7 @@ class BriefSheetHelper:
             lambda x: "double" if x["shift_duration"] > 10 else "single", axis=1)
         
         # am or pm shift
-        def get_shift(x, am_limit = 12):
+        def get_shift(x, am_limit = 15):
             if x["start_hour"] < am_limit:
                 return "am"
             elif x["start_hour"] >= am_limit:
