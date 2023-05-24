@@ -1,0 +1,51 @@
+group,user,date,start,end,type,break,workDepartment
+Team Leaders,xxxxxx,08/05/2023,09:00,22:00,Runner Drinks Expo,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,09:00,17:00,Till,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,10:00,17:00,Runner Food,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,10:00,18:00,Host Up,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,12:00,18:45,Till,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,12:00,20:00,Host Floor,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,13:00,22:00,Runner Food Expo,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,16:00,00:00,Till,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,16:00,00:00,Till,30,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,17:00,23:00,Runner Drinks,none,Bar
+F&B Team Leaders,xxxxxx,08/05/2023,17:00,00:00,Host Up,30,Bar
+Hosts,xxxxxx,08/05/2023,08:00,16:00,Host Up,30,Bar
+Hosts,xxxxxx,08/05/2023,09:00,18:00,Host Down,30,Bar
+Hosts,xxxxxx,08/05/2023,10:00,23:00,Runner Food,30,Bar
+Hosts,xxxxxx,08/05/2023,10:00,13:00,Event Host,none,Bar
+Hosts,xxxxxx,08/05/2023,10:00,19:30,Host Down,30,Bar
+Hosts,xxxxxx,08/05/2023,11:00,19:00,Table Service Host,30,Bar
+Hosts,xxxxxx,08/05/2023,11:00,19:00,Host Up,30,Bar
+Hosts,xxxxxx,08/05/2023,12:00,23:30,Table Service Host,30,Bar
+Hosts,xxxxxx,08/05/2023,12:00,21:00,Host Down,30,Bar
+Hosts,xxxxxx,08/05/2023,12:00,15:30,Event Host,none,Bar
+Hosts,xxxxxx,08/05/2023,12:00,20:00,Table Service Host,30,Bar
+Hosts,xxxxxx,08/05/2023,14:00,23:00,Table Service Host,30,Bar
+Hosts,xxxxxx,08/05/2023,16:00,23:00,Host Up,30,Bar
+Hosts,xxxxxx,08/05/2023,17:00,23:00,Host Down,none,Bar
+Hosts,xxxxxx,08/05/2023,18:00,19:15,Host Down,none,Bar
+Servers,xxxxxx,08/05/2023,08:00,16:00,Barista,30,Bar
+Servers,xxxxxx,08/05/2023,09:00,17:00,Barista,30,Bar
+Servers,xxxxxx,08/05/2023,09:30,12:30,Event Host,none,Bar
+Servers,xxxxxx,08/05/2023,10:00,18:00,Tickets,30,Bar
+Servers,xxxxxx,08/05/2023,11:00,19:00,Tickets,30,Bar
+Servers,xxxxxx,08/05/2023,12:00,22:00,Bar Back.,30,Bar
+Servers,xxxxxx,08/05/2023,18:00,00:00,Tickets,none,Bar
+Servers,xxxxxx,08/05/2023,18:00,00:00,Tickets,none,Bar
+Runners,xxxxxx,08/05/2023,08:00,16:00,Runner Food,30,Bar
+Runners,xxxxxx,08/05/2023,09:00,17:00,Runner Drinks,30,Bar
+Runners,xxxxxx,08/05/2023,10:00,17:00,Runner Food,30,Bar
+Runners,xxxxxx,08/05/2023,10:00,17:00,Runner Drinks,30,Bar
+Runners,xxxxxx,08/05/2023,10:00,17:00,Runner Drinks,30,Bar
+Runners,xxxxxx,08/05/2023,11:00,18:00,Runner Sweep,30,Bar
+Runners,xxxxxx,08/05/2023,12:00,22:00,Runner Drinks,30,Bar
+Runners,xxxxxx,08/05/2023,14:20,18:00,Runner Drinks,none,Bar
+Runners,xxxxxx,08/05/2023,17:00,23:00,Runner Food,none,Bar
+Runners,xxxxxx,08/05/2023,17:00,00:00,Runner Food,30,Bar
+Runners,xxxxxx,08/05/2023,17:00,23:00,Runner Food,30,Bar
+Runners,xxxxxx,08/05/2023,17:00,23:00,Runner Food,none,Bar
+Runners,xxxxxx,08/05/2023,17:00,23:00,Runner Drinks,30,Bar
+Runners,xxxxxx,08/05/2023,17:00,23:00,Runner Drinks,30,Bar
+Runners,xxxxxx,08/05/2023,18:00,00:00,KP,none,Bar
+Runners,xxxxxx,08/05/2023,18:00,00:00,Runner Drinks,none,Bar
