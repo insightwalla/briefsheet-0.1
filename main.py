@@ -113,6 +113,8 @@ class BriefSheetHelper:
         self.df.rename(columns={"user": "Name"}, inplace=True)
         # create a surname columns splitting the name at space when there are two words
         self.df["Surname"] = self.df["Name"].apply(lambda x: x.split(" ")[1] if len(x.split(" ")) > 1 else None) 
+        self.df["Name"] = self.df["Name"].apply(lambda x: x.split(" ")[0])
+
         # create a empty section column
         self.df["Section"] = None
         # sort by hour start
