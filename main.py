@@ -87,12 +87,18 @@ class BriefSheetHelper:
         self.df["shift_type"] = self.df.apply(
             lambda x: "double" if x["shift_duration"] > 12 else "single", axis=1)
         
-        # am or pm shift
-        def get_shift(x, am_limit = 15):
+                # am or pm shift
+        def get_shift(x, am_limit = 14):
+            minutes = x["start"].minute
             if x["start_hour"] < am_limit:
                 return "am"
-            elif x["start_hour"] >= am_limit:
+            elif x["start_hour"] == am_limit and minutes == 0:
+                return "am"
+            elif x["start_hour"] == am_limit and minutes > 0:
                 return "pm"
+            elif x["start_hour"] > am_limit:
+                return "pm"
+            
         self.df["shift_period"] = self.df.apply(get_shift, axis=1)
 
         
