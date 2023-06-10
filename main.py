@@ -158,6 +158,7 @@ class BriefSheetHelper:
                 group = self.df[self.df["Division"] == g]
                 # reset index
                 group.fillna("", inplace=True)
+                group.rename(columns={"start1": "StartAM", "end1": "EndAM", "start2": "StartPM", "end2": "EndPM"}, inplace=True)
                 st.dataframe(group, use_container_width=True)
 
 if __name__ == "__main__":
