@@ -24,7 +24,6 @@ Probelm 1:
 '''
 import streamlit as st
 st.set_page_config(layout="wide")
-
 import pandas as pd
 
 
@@ -55,8 +54,8 @@ class BriefSheetHelper:
         # create a surname columns splitting the name at space when there are two words
         self.df["Surname"] = self.df["Name"].apply(lambda x: x.split(" ")[1] if len(x.split(" ")) > 1 else None) 
         self.df["Name"] = self.df["Name"].apply(lambda x: x.split(" ")[0])
-        # create a empty section columnx
-        self.df["Section"] = None
+        # create a section column from type column
+        self.df["Section"] = self.df["type"]
 
     def transformation0(self):
         '''
@@ -75,7 +74,7 @@ class BriefSheetHelper:
         # if end hour is less than start hour, add 24 to end hour
         self.df["end_hour"] = self.df.apply(
             lambda x: x["end_hour"] + 24 if x["end_hour"] < x["start_hour"] else x["end_hour"], axis=1)
-        # 3. Create a column with the shift duration
+        # 3. Create a column with the the minutes
     
     def transformation1(self):
         '''
@@ -87,9 +86,9 @@ class BriefSheetHelper:
             lambda x: x["end_hour"] - x["start_hour"], axis=1)
         # create a column with the shift type if the shift is greater than 10 hours
         self.df["shift_type"] = self.df.apply(
-            lambda x: "double" if x["shift_duration"] > 12 else "single", axis=1)
+            lambda x: "double" if x["shift_duration"] >= 12 else "single", axis=1)
         
-                # am or pm shift
+        # am or pm shift
         def get_shift(x, am_limit = 14):
             minutes = x["start"].minute
             if x["start_hour"] < am_limit:
@@ -100,7 +99,6 @@ class BriefSheetHelper:
                 return "pm"
             elif x["start_hour"] > am_limit:
                 return "pm"
-            
         self.df["shift_period"] = self.df.apply(get_shift, axis=1)
 
         
@@ -130,9 +128,9 @@ class BriefSheetHelper:
         self.df["end1"] = self.df.apply(get_end1, axis=1)
         self.df["start2"] = self.df.apply(get_start2, axis=1)
         self.df["end2"] = self.df.apply(get_end2, axis=1)
-
+    
+    def transformation2(self):
         # if shift is pm then start2 = start1 and end2 = end1 and start1 = None and end1 = None
-
         self.df["start2"] = self.df.apply(lambda x: x["start1"] if x["shift_period"] == "pm" else x["start2"], axis=1)
         self.df["end2"] = self.df.apply(lambda x: x["end1"] if x["shift_period"] == "pm" else x["end2"], axis=1)
 
@@ -140,10 +138,31 @@ class BriefSheetHelper:
         self.df["start1"] = self.df.apply(lambda x: None if x["shift_period"] == "pm" else x["start1"], axis=1)
         self.df["end1"] = self.df.apply(lambda x: None if x["shift_period"] == "pm" else x["end1"], axis=1)
 
-        # sort by hour start
+        # create a new column with the section pm
+        self.df["SectionPM"] = self.df["Section"]
+        # show section pm only if shift is double or pm
+        self.df["SectionPM"] = self.df.apply(lambda x: x["SectionPM"] if x["shift_type"] == "double" or x["shift_period"] == "pm" else "", axis=1)
+        # show in section am only if shift is single or am
+        self.df["Section"] = self.df.apply(lambda x: x["Section"] if x["shift_period"] == "am" else "", axis=1)        
+        
+        # sort by hour start and am/pm
         self.df.sort_values(by=["start_hour", "shift_period"], inplace=True)
-        columns = ['Division', 'Name', 'Surname', 'start1', 'end1','Section', 'start2', 'end2']
+        #self.df.sort_values(by=["shift_period"], inplace=True)
+        columns = ['Division', 'Name', 'Surname', 'start1', 'end1','Section', 'start2', 'end2', 'SectionPM']
+        # now create a new column with the section pm
         self.df = self.df[columns]
+
+    def transformation3(self):
+        # fill na with empty string
+        self.df.fillna("", inplace=True)
+        # change name column start1 to StartAM and end1 to EndAM
+        self.df.rename(columns={"start1": "StartAM"}, inplace=True)
+        self.df.rename(columns={"end1": "EndAM"}, inplace=True)
+        # change name column start2 to StartPM and end2 to EndPM
+        self.df.rename(columns={"start2": "StartPM"}, inplace=True)
+        self.df.rename(columns={"end2": "EndPM"}, inplace=True)
+        # change section to SectionAM and SectionPM
+        self.df.rename(columns={"Section": "SectionAM"}, inplace=True)
 
     
     def run(self):
@@ -151,6 +170,9 @@ class BriefSheetHelper:
         self.cleaning()
         self.transformation0()
         self.transformation1()
+        self.transformation2()
+        self.transformation3()
+
 
         
         # take unique values of the column "Group"
@@ -159,9 +181,9 @@ class BriefSheetHelper:
             with st.expander(f"{g} : {len(self.df[self.df['Division'] == g])}"):
                 group = self.df[self.df["Division"] == g]
                 # reset index
-                group.fillna("", inplace=True)
-                # chan
+                group.reset_index(drop=True, inplace=True)
                 st.dataframe(group, use_container_width=True)
+
 
 if __name__ == "__main__":
     briefsheet = BriefSheetHelper()
