@@ -16,8 +16,12 @@ streamlit run main.py
         "Type": "Till"
         "workdepartment": "Bar"
 - 
+---
+Probelm 1:
+- need to keep only name in name column
+- Check format of time in start and end column
+- Need to fix double shift logic
 '''
-
 import streamlit as st
 import pandas as pd
 
@@ -37,24 +41,51 @@ class BriefSheetHelper:
             st.info("Please upload a file of type: " + ", ".join(["csv"]))
             st.stop()
 
-    def process_data(self):
-        # keep only hour from the column "start"
+    def cleaning(self):
+        '''
+        Here we are going to clean the dataframe
+        1. Rename the column "group" to "Division" and "user" to "Name"
+        2. Create a Surname column, and modify the Name column keeping only the name
+        3. Create a empty section column
+        '''
+        self.df.rename(columns={"group": "Division"}, inplace=True)
+        self.df.rename(columns={"user": "Name"}, inplace=True)
+        # create a surname columns splitting the name at space when there are two words
+        self.df["Surname"] = self.df["Name"].apply(lambda x: x.split(" ")[1] if len(x.split(" ")) > 1 else None) 
+        self.df["Name"] = self.df["Name"].apply(lambda x: x.split(" ")[0])
+        # create a empty section columnx
+        self.df["Section"] = None
+
+    def transformation0(self):
+        '''
+        With this method we are going to create a new dataframe with the following columns:
+        1. Make the column "start" and "end" datetime format keeping
+        2. Create a column with the hour of the start and end
+        3. Create a column with the shift duration
+        4. Create a column with the shift type if the shift is greater than 10 hours
+        '''
+        # 1. Make the column "start" and "end" datetime format keeping
         self.df["start"] = pd.to_datetime(self.df["start"]).dt.time
-        # keep only hour from the column "end"
         self.df["end"] = pd.to_datetime(self.df["end"]).dt.time
-        # create a column with start hour and end hour
+        # 2. Create a column with the hour of the start and end
         self.df["start_hour"] = self.df["start"].apply(lambda x: x.hour)
         self.df["end_hour"] = self.df["end"].apply(lambda x: x.hour)
         # if end hour is less than start hour, add 24 to end hour
         self.df["end_hour"] = self.df.apply(
             lambda x: x["end_hour"] + 24 if x["end_hour"] < x["start_hour"] else x["end_hour"], axis=1)
-        # create a column with the shift duration
+        # 3. Create a column with the shift duration
+    
+    def transformation1(self):
+        '''
+        Here we create shift_type column and shift_duration column
+        The shift type is "single" if the shift is less than 10 hours, "double" otherwise
+
+        '''
         self.df["shift_duration"] = self.df.apply(
             lambda x: x["end_hour"] - x["start_hour"], axis=1)
-        
         # create a column with the shift type if the shift is greater than 10 hours
         self.df["shift_type"] = self.df.apply(
-            lambda x: "double" if x["shift_duration"] > 10 else "single", axis=1)
+            lambda x: "double" if x["shift_duration"] > 12 else "single", axis=1)
         
         # am or pm shift
         def get_shift(x, am_limit = 15):
@@ -62,7 +93,6 @@ class BriefSheetHelper:
                 return "am"
             elif x["start_hour"] >= am_limit:
                 return "pm"
-            
         self.df["shift_period"] = self.df.apply(get_shift, axis=1)
 
         
@@ -102,26 +132,19 @@ class BriefSheetHelper:
         self.df["start1"] = self.df.apply(lambda x: None if x["shift_period"] == "pm" else x["start1"], axis=1)
         self.df["end1"] = self.df.apply(lambda x: None if x["shift_period"] == "pm" else x["end1"], axis=1)
 
-
-    
-    def run(self):
-        st.image("assets/logo.png", width=200)
-        self.process_data()
-        # rename the column "group" to "Group"
-        self.df.rename(columns={"group": "Division"}, inplace=True)
-        # rename user to name
-        self.df.rename(columns={"user": "Name"}, inplace=True)
-        # create a surname columns splitting the name at space when there are two words
-        self.df["Surname"] = self.df["Name"].apply(lambda x: x.split(" ")[1] if len(x.split(" ")) > 1 else None) 
-        self.df["Name"] = self.df["Name"].apply(lambda x: x.split(" ")[0])
-
-        # create a empty section column
-        self.df["Section"] = None
         # sort by hour start
         self.df.sort_values(by=["start_hour"], inplace=True)
         columns = ['Division', 'Name', 'Surname', 'start1', 'end1','Section', 'start2', 'end2']
         self.df = self.df[columns]
 
+    
+    def run(self):
+        st.image("assets/logo.png", width=200)
+        self.cleaning()
+        self.transformation0()
+        self.transformation1()
+
+        
         # take unique values of the column "Group"
         groups = self.df["Division"].unique()
         for g in groups:
