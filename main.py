@@ -139,7 +139,7 @@ class BriefSheetHelper:
         self.df["end1"] = self.df.apply(lambda x: None if x["shift_period"] == "pm" else x["end1"], axis=1)
 
         # sort by hour start
-        self.df.sort_values(by=["start_hour"], inplace=True)
+        self.df.sort_values(by=["start_hour", "shift_period"], inplace=True)
         columns = ['Division', 'Name', 'Surname', 'start1', 'end1','Section', 'start2', 'end2']
         self.df = self.df[columns]
 
