@@ -157,9 +157,8 @@ class BriefSheetHelper:
             with st.expander(f"{g} : {len(self.df[self.df['Division'] == g])}"):
                 group = self.df[self.df["Division"] == g]
                 # reset index
-                group.reset_index(drop=True, inplace=True)
-                st.write(group)
-
+                group.fillna("", inplace=True)
+                st.dataframe(group, use_container_width=True)
 
 if __name__ == "__main__":
     briefsheet = BriefSheetHelper()
